@@ -190,6 +190,100 @@
                 grid-template-columns: 1fr;
             }
         }
+
+        /* Lightbox */
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 1000;
+            cursor: pointer;
+        }
+
+        .lightbox.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .lightbox-content {
+            position: relative;
+            max-width: 90vw;
+            max-height: 90vh;
+        }
+
+        .lightbox-content img {
+            max-width: 90vw;
+            max-height: 85vh;
+            object-fit: contain;
+            border-radius: 0.25rem;
+        }
+
+        .lightbox-caption {
+            text-align: center;
+            margin-top: 1rem;
+            color: #fff;
+        }
+
+        .lightbox-caption .photo-caption {
+            font-family: 'Instrument Serif', Georgia, serif;
+            font-size: 1.5rem;
+            color: #fff;
+        }
+
+        .lightbox-caption .photo-location {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            width: 3rem;
+            height: 3rem;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            z-index: 1001;
+        }
+
+        .lightbox-close::before,
+        .lightbox-close::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 2rem;
+            height: 2px;
+            background: #fff;
+        }
+
+        .lightbox-close::before {
+            transform: translate(-50%, -50%) rotate(45deg);
+        }
+
+        .lightbox-close::after {
+            transform: translate(-50%, -50%) rotate(-45deg);
+        }
+
+        .lightbox-close:hover::before,
+        .lightbox-close:hover::after {
+            background: var(--accent);
+        }
+
+        .photo-card img {
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -281,5 +375,53 @@
             </div>
         </footer>
     </div>
+
+    <!-- Lightbox -->
+    <div class="lightbox" id="lightbox">
+        <button class="lightbox-close" aria-label="Close"></button>
+        <div class="lightbox-content">
+            <img src="" alt="" id="lightbox-img">
+            <div class="lightbox-caption">
+                <div class="photo-caption" id="lightbox-caption"></div>
+                <div class="photo-location" id="lightbox-location"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightbox-img');
+        const lightboxCaption = document.getElementById('lightbox-caption');
+        const lightboxLocation = document.getElementById('lightbox-location');
+
+        document.querySelectorAll('.photo-card').forEach(card => {
+            card.addEventListener('click', () => {
+                const img = card.querySelector('img');
+                const caption = card.querySelector('.photo-caption').textContent;
+                const location = card.querySelector('.photo-location').textContent;
+
+                lightboxImg.src = img.src;
+                lightboxImg.alt = img.alt;
+                lightboxCaption.textContent = caption;
+                lightboxLocation.textContent = location;
+                lightbox.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            });
+        });
+
+        lightbox.addEventListener('click', (e) => {
+            if (e.target === lightbox || e.target.classList.contains('lightbox-close')) {
+                lightbox.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && lightbox.classList.contains('active')) {
+                lightbox.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        });
+    </script>
 </body>
 </html>
