@@ -199,7 +199,9 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.95);
+            background: radial-gradient(ellipse at center, rgba(250, 250, 250, 0.95) 0%, rgba(250, 250, 250, 0.7) 50%, rgba(250, 250, 250, 0.4) 100%);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
             z-index: 1000;
             cursor: pointer;
         }
@@ -232,17 +234,17 @@
         .lightbox-caption {
             text-align: center;
             margin-top: 1rem;
-            color: #fff;
+            color: var(--text);
         }
 
         .lightbox-caption .photo-caption {
             font-family: 'Instrument Serif', Georgia, serif;
             font-size: 1.5rem;
-            color: #fff;
+            color: var(--text);
         }
 
         .lightbox-caption .photo-location {
-            color: rgba(255, 255, 255, 0.7);
+            color: var(--text-secondary);
         }
 
         .lightbox-close {
@@ -265,7 +267,7 @@
             left: 50%;
             width: 2rem;
             height: 2px;
-            background: #fff;
+            background: var(--text);
         }
 
         .lightbox-close::before {
